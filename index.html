@@ -2,21 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trapper Guy's Games!</title>
     <style>
-      *{
+      * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
       }
-      body{
+      body {
         font-family: Arial, sans-serif;
         background-color: #121212;
         color: #ffffff;
         padding-top: 80px;
       }
-      .header{
+
+      /* Sticky Top Navigation Bar */
+      .header {
         position: fixed;
         top: 0;
         left: 0;
@@ -29,52 +31,212 @@
         justify-content: center;
         z-index: 1000;
       }
-      .header h1{
+      .header h1 {
         font-size: 24px;
         color: #ffffff;
         letter-spacing: 1px;
       }
-      .container{
+
+      /* Main Game Grid */
+      .container {
         max-width: 1000px;
         margin: 20px auto;
         padding: 0 16px;
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
         gap: 20px;
-      .game-card{
+      }
+
+      /* Simple Card in Main Grid */
+      .game-card {
         background-color: #1e1e1e;
         border: 1px solid #333;
         border-radius: 8px;
         overflow: hidden;
-        text-decoration: none;
+        cursor: pointer;
         color: white;
         transition: transform 0.2s, border-color 0.2s;
         display: flex;
         flex-direction: column;
       }
-      .game-card:hover{
+      .game-card:hover {
         transform: translateY(-5px);
         border-color: #4cbf56;
       }
-      .thumbnail{
+      .grid-thumbnail {
         width: 100%;
         height: 140px;
         object-fit: cover;
         background-color: #000;
       }
-      .card-info{
+      .card-info {
         padding: 12px;
         display: flex;
         flex-direction: column;
         gap: 6px;
       }
-      .game-title{
-        font-size: 18px;
+      .card-title {
+        font-size: 16px;
         font-weight: bold;
       }
-      .game-date{
+      .card-date {
         font-size: 12px;
         color: #aaaaaa;
+      }
+
+      /* POP-UP MODAL STYLES                       */
+      .modal-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.85);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+        padding: 16px;
+        backdrop-filter: blur(4px);
+      }
+      .modal-backdrop.active {
+        display: flex;
+      }
+
+      .modal-card {
+        background-color: #18181b;
+        border: 2px solid #333;
+        border-radius: 12px;
+        padding: 24px;
+        width: 100%;
+        max-width: 850px;
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 24px;
+        box-shadow: 0 12px 32px rgba(0,0,0,0.8);
+        animation: popIn 0.2s ease-out;
+      }
+
+      @keyframes popIn {
+        from { transform: scale(0.95); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+      }
+
+      @media (max-width: 768px) {
+        .modal-card {
+          grid-template-columns: 1fr;
+          max-height: 90vh;
+          overflow-y: auto;
+        }
+      }
+      .close-btn {
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        background: none;
+        border: none;
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.2s;
+      }
+      .close-btn:hover {
+        color: #ffffff;
+      }
+      .popup-left {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .popup-thumbnail {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 6px;
+        background-color: #000;
+        border: 1px solid #444;
+      }
+      .popup-title {
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .popup-meta {
+        font-size: 13px;
+        color: #aaaaaa;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .device-icons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .device-icons svg {
+        width: 18px;
+        height: 18px;
+        fill: #ffffff;
+        opacity: 0.85;
+      }
+      .play-btn {
+        background-color: #2ecc71;
+        color: white;
+        text-decoration: none;
+        text-align: center;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: background-color 0.2s, transform 0.1s;
+        box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+        margin-top: 4px;
+      }
+      .play-btn:hover {
+        background-color: #27ae60;
+        transform: translateY(-2px);
+      }
+      .popup-right {
+        background-color: #121214;
+        border: 1px solid #2a2a2e;
+        border-radius: 8px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .desc-header {
+        font-size: 15px;
+        font-weight: bold;
+        color: #ffffff;
+        border-bottom: 1px solid #2a2a2e;
+        padding-bottom: 6px;
+      }
+      .desc-text {
+        font-size: 13px;
+        color: #cccccc;
+        line-height: 1.5;
+        white-space: pre-line;
+      }
+      .credits-text {
+        font-size: 11px;
+        color: #888888;
+        border-top: 1px dashed #2a2a2e;
+        padding-top: 8px;
+      }
+      .desc-link {
+        color: #3498db;
+        text-decoration: none;
+        word-break: break-all;
+      }
+      .desc-link:hover {
+        text-decoration: underline;
       }
     </style>
   </head>
@@ -82,34 +244,112 @@
     <header class="header">
       <h1>Trapper Guy's Games!</h1>
     </header>
+
     <main class="container" id="game-list"></main>
+
+    <div class="modal-backdrop" id="modalBackdrop">
+      <div class="modal-card">
+        <button class="close-btn" id="closeModal">&times;</button>
+        <div class="popup-left">
+          <img class="popup-thumbnail" id="modalThumb" src="" alt="Thumbnail">
+          <div class="popup-title" id="modalTitle"></div>
+          <div class="popup-meta">
+            <span id="modalMeta"></span>
+            <div class="device-icons" id="modalIcons"></div>
+          </div>
+          <a class="play-btn" id="modalPlay" href="#" target="_blank">
+            ▶ PLAY GAME
+          </a>
+        </div>
+        <div class="popup-right">
+          <div>
+            <div class="desc-header">Description:</div>
+            <div class="desc-text" id="modalDesc" style="margin-top: 8px;"></div>
+          </div>
+          <div>
+            <div class="credits-text" id="modalCredits"></div>
+            <div id="modalLinkContainer" style="margin-top: 6px; font-size: 12px; display: none;">
+              Link to original: <a class="desc-link" id="modalLink" href="#" target="_blank"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
-      // ADD GAMES HERE.
+      // ADD YOUR GAMES HERE
       const myGames = [
         {
-          title: "The Swap Possible Game",
+          id: "swap-possible",
+          title: "The Swap! Possible Game",
+          version: "1.0.6",
           date: "2026-05-10",
           link: "https://trapperperson.github.io/The-Swap-Possible-Game/",
           thumbnail: "images/tspgthumbnail.png",
-        },
+          description: `The Swap! Possible Game is a Swapped version of The Impossible Game, it introduces a brand new level "Stable Reality", it has everything and even a little surprise once you beat it!`,
+          credits: "All sprites were made by Trapper Guy and some took from The Impossible Game's sprites, and it was made on Scratch's Engine and Packaged inside Turbowarp's Packager.",
+          originalLink: "https://youtu.be/T8vSogP9ipw?si=RLSIebNP7ioCE42whttps://youtu.be/T8vSogP9ipw?si=RLSIebNP7ioCE42w",
+          mobile: true,
+          pc: true
+        }
       ];
 
+      // Build Grid Cards
       const container = document.getElementById('game-list');
-      myGames.forEach(game => {
-        const card = document.createElement('a');
-        card.className = 'game-card';
-        card.href = game.link;
-        card.target = '_blank';
+      const backdrop = document.getElementById('modalBackdrop');
+      const closeBtn = document.getElementById('closeModal');
 
+      const mobileIconSVG = `<svg viewBox="0 0 24 24"><path d="M17 1H7C5.9 1 5 1.9 5 3v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14zM7 3h10v1H7V3z"/></svg>`;
+      const pcIconSVG = `<svg viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg>`;
+
+      myGames.forEach(game => {
+        const card = document.createElement('div');
+        card.className = 'game-card';
         card.innerHTML = `
-          <img class="thumbnail" src="${game.thumbnail}" alt="${game.title} Thumbnail">
+          <img class="grid-thumbnail" src="${game.thumbnail}" alt="${game.title}">
           <div class="card-info">
-            <div class="game-title">${game.title}</div>
-            <div class="game-date">Released: ${game.date}</div>
+            <div class="card-title">${game.title}</div>
+            <div class="card-date">Released: ${game.date}</div>
           </div>
         `;
 
+        // Click card to open pop-up modal
+        card.addEventListener('click', () => openModal(game));
         container.appendChild(card);
+      });
+
+      function openModal(game) {
+        document.getElementById('modalThumb').src = game.thumbnail;
+        document.getElementById('modalTitle').textContent = game.title;
+        document.getElementById('modalMeta').textContent = `Released: ${game.date} | Version: ${game.version}`;
+        document.getElementById('modalDesc').textContent = game.description;
+        document.getElementById('modalCredits').textContent = game.credits;
+        document.getElementById('modalPlay').href = game.link;
+
+        // Icons
+        const iconsContainer = document.getElementById('modalIcons');
+        iconsContainer.innerHTML = '';
+        if (game.mobile) iconsContainer.innerHTML += mobileIconSVG;
+        if (game.pc) iconsContainer.innerHTML += pcIconSVG;
+
+        // Original Link
+        const linkContainer = document.getElementById('modalLinkContainer');
+        const modalLink = document.getElementById('modalLink');
+        if (game.originalLink) {
+          modalLink.href = game.originalLink;
+          modalLink.textContent = game.originalLink;
+          linkContainer.style.display = 'block';
+        } else {
+          linkContainer.style.display = 'none';
+        }
+
+        backdrop.classList.add('active');
+      }
+
+      // Close modal actions
+      closeBtn.addEventListener('click', () => backdrop.classList.remove('active'));
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) backdrop.classList.remove('active');
       });
     </script>
   </body>
