@@ -37,7 +37,7 @@
         letter-spacing: 1px;
       }
 
-      /* Main Game Grid */
+      /* Main Grid */
       .container {
         max-width: 1000px;
         margin: 20px auto;
@@ -47,7 +47,6 @@
         gap: 20px;
       }
 
-      /* Simple Card in Main Grid */
       .game-card {
         background-color: #1e1e1e;
         border: 1px solid #333;
@@ -84,7 +83,9 @@
         color: #aaaaaa;
       }
 
+      /* ========================================== */
       /* POP-UP MODAL STYLES                       */
+      /* ========================================== */
       .modal-backdrop {
         display: none;
         position: fixed;
@@ -96,24 +97,26 @@
         z-index: 2000;
         justify-content: center;
         align-items: center;
-        padding: 16px;
+        padding: 20px;
         backdrop-filter: blur(4px);
       }
       .modal-backdrop.active {
         display: flex;
       }
 
+      /* Taller and larger pop-up box matching your image */
       .modal-card {
         background-color: #18181b;
         border: 2px solid #333;
         border-radius: 12px;
-        padding: 24px;
+        padding: 36px;
         width: 100%;
-        max-width: 850px;
+        max-width: 950px;
+        min-height: 520px;
         position: relative;
         display: grid;
-        grid-template-columns: 1fr 1.2fr;
-        gap: 24px;
+        grid-template-columns: 1.1fr 1.3fr;
+        gap: 32px;
         box-shadow: 0 12px 32px rgba(0,0,0,0.8);
         animation: popIn 0.2s ease-out;
       }
@@ -128,16 +131,20 @@
           grid-template-columns: 1fr;
           max-height: 90vh;
           overflow-y: auto;
+          min-height: auto;
+          padding: 24px;
         }
       }
+
+      /* Close Button */
       .close-btn {
         position: absolute;
-        top: 12px;
-        right: 16px;
+        top: 14px;
+        right: 18px;
         background: none;
         border: none;
         color: #aaa;
-        font-size: 28px;
+        font-size: 32px;
         font-weight: bold;
         cursor: pointer;
         transition: color 0.2s;
@@ -145,97 +152,103 @@
       .close-btn:hover {
         color: #ffffff;
       }
+
+      /* Inside Pop-up: Left Side */
       .popup-left {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 16px;
       }
+
+      /* Bigger, complete thumbnail image without cutting off */
       .popup-thumbnail {
         width: 100%;
-        height: 180px;
-        object-fit: cover;
-        border-radius: 6px;
-        background-color: #000;
-        border: 1px solid #444;
+        height: 240px;
+        object-fit: contain;
+        border-radius: 8px;
+        background-color: #0d0d0f;
+        border: 1px solid #333;
       }
+
       .popup-title {
-        font-size: 20px;
+        font-size: 22px;
         font-weight: bold;
       }
+
       .popup-meta {
-        font-size: 13px;
+        font-size: 14px;
         color: #aaaaaa;
         display: flex;
         justify-content: space-between;
         align-items: center;
       }
+
+      /* Clean White Device SVG Icons */
       .device-icons {
         display: flex;
         gap: 8px;
         align-items: center;
       }
       .device-icons svg {
-        width: 18px;
-        height: 18px;
+        width: 22px;
+        height: 22px;
         fill: #ffffff;
-        opacity: 0.85;
+        opacity: 0.9;
       }
+
+      /* Large Green Play Button */
       .play-btn {
         background-color: #2ecc71;
         color: white;
         text-decoration: none;
         text-align: center;
-        padding: 12px;
+        padding: 16px;
         border-radius: 8px;
-        font-size: 18px;
+        font-size: 22px;
         font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 10px;
         transition: background-color 0.2s, transform 0.1s;
         box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
-        margin-top: 4px;
+        margin-top: auto;
       }
       .play-btn:hover {
         background-color: #27ae60;
         transform: translateY(-2px);
       }
+
+      /* Inside Pop-up: Right Side Description Box */
       .popup-right {
         background-color: #121214;
         border: 1px solid #2a2a2e;
         border-radius: 8px;
-        padding: 16px;
+        padding: 24px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        gap: 12px;
+        gap: 16px;
       }
+
       .desc-header {
-        font-size: 15px;
+        font-size: 18px;
         font-weight: bold;
         color: #ffffff;
-        border-bottom: 1px solid #2a2a2e;
-        padding-bottom: 6px;
       }
+
       .desc-text {
-        font-size: 13px;
+        font-size: 14px;
         color: #cccccc;
-        line-height: 1.5;
+        line-height: 1.6;
         white-space: pre-line;
       }
-      .credits-text {
-        font-size: 11px;
-        color: #888888;
-        border-top: 1px dashed #2a2a2e;
-        padding-top: 8px;
-      }
-      .desc-link {
+
+      .desc-text a {
         color: #3498db;
         text-decoration: none;
         word-break: break-all;
       }
-      .desc-link:hover {
+      .desc-text a:hover {
         text-decoration: underline;
       }
     </style>
@@ -245,8 +258,10 @@
       <h1>Trapper Guy's Games!</h1>
     </header>
 
+    <!-- Main Grid -->
     <main class="container" id="game-list"></main>
 
+    <!-- Pop-up Overlay Container -->
     <div class="modal-backdrop" id="modalBackdrop">
       <div class="modal-card">
         <button class="close-btn" id="closeModal">&times;</button>
@@ -258,26 +273,20 @@
             <div class="device-icons" id="modalIcons"></div>
           </div>
           <a class="play-btn" id="modalPlay" href="#" target="_blank">
-            ▶ PLAY GAME
+            ▶ PLAY
           </a>
         </div>
         <div class="popup-right">
-          <div>
-            <div class="desc-header">Description:</div>
-            <div class="desc-text" id="modalDesc" style="margin-top: 8px;"></div>
-          </div>
-          <div>
-            <div class="credits-text" id="modalCredits"></div>
-            <div id="modalLinkContainer" style="margin-top: 6px; font-size: 12px; display: none;">
-              Link to original: <a class="desc-link" id="modalLink" href="#" target="_blank"></a>
-            </div>
-          </div>
+          <div class="desc-header">Description:</div>
+          <div class="desc-text" id="modalDesc"></div>
         </div>
       </div>
     </div>
 
     <script>
+      // ==========================================
       // ADD YOUR GAMES HERE
+      // ==========================================
       const myGames = [
         {
           id: "swap-possible",
@@ -285,16 +294,17 @@
           version: "1.0.6",
           date: "2026-05-10",
           link: "https://trapperperson.github.io/The-Swap-Possible-Game/",
-          thumbnail: "images/tspgthumbnail.png",
-          description: `The Swap! Possible Game is a Swapped version of The Impossible Game, it introduces a brand new level "Stable Reality", it has everything and even a little surprise once you beat it!`,
-          credits: "All sprites were made by Trapper Guy and some took from The Impossible Game's sprites, and it was made on Scratch's Engine and Packaged inside Turbowarp's Packager.",
-          originalLink: "https://youtu.be/T8vSogP9ipw?si=RLSIebNP7ioCE42whttps://youtu.be/T8vSogP9ipw?si=RLSIebNP7ioCE42w",
+          thumbnail: "https://via.placeholder.com/400x220/000000/FFFFFF?text=Swap+Possible",
+          description: `The Swap! Possible Game is a Swapped version of The Impossible Game, it introduces a brand new level "Stable Reality", it has everything and even a little surprise once you beat it!
+
+All sprites were made by Trapper Guy and some took from The Impossible Game's sprites, and it was made on Scratch's Engine and Packaged inside Turbowarp's Packager.
+
+Link to original: <a href="https://youtube.com/example-video" target="_blank">https://youtube.com/example-video</a>`,
           mobile: true,
           pc: true
         }
       ];
 
-      // Build Grid Cards
       const container = document.getElementById('game-list');
       const backdrop = document.getElementById('modalBackdrop');
       const closeBtn = document.getElementById('closeModal');
@@ -313,7 +323,6 @@
           </div>
         `;
 
-        // Click card to open pop-up modal
         card.addEventListener('click', () => openModal(game));
         container.appendChild(card);
       });
@@ -322,31 +331,17 @@
         document.getElementById('modalThumb').src = game.thumbnail;
         document.getElementById('modalTitle').textContent = game.title;
         document.getElementById('modalMeta').textContent = `Released: ${game.date} | Version: ${game.version}`;
-        document.getElementById('modalDesc').textContent = game.description;
-        document.getElementById('modalCredits').textContent = game.credits;
+        document.getElementById('modalDesc').innerHTML = game.description;
         document.getElementById('modalPlay').href = game.link;
 
-        // Icons
         const iconsContainer = document.getElementById('modalIcons');
         iconsContainer.innerHTML = '';
         if (game.mobile) iconsContainer.innerHTML += mobileIconSVG;
         if (game.pc) iconsContainer.innerHTML += pcIconSVG;
 
-        // Original Link
-        const linkContainer = document.getElementById('modalLinkContainer');
-        const modalLink = document.getElementById('modalLink');
-        if (game.originalLink) {
-          modalLink.href = game.originalLink;
-          modalLink.textContent = game.originalLink;
-          linkContainer.style.display = 'block';
-        } else {
-          linkContainer.style.display = 'none';
-        }
-
         backdrop.classList.add('active');
       }
 
-      // Close modal actions
       closeBtn.addEventListener('click', () => backdrop.classList.remove('active'));
       backdrop.addEventListener('click', (e) => {
         if (e.target === backdrop) backdrop.classList.remove('active');
