@@ -16,8 +16,6 @@
         color: #ffffff;
         padding-top: 80px;
       }
-
-      /* Sticky Top Navigation Bar */
       .header {
         position: fixed;
         top: 0;
@@ -36,8 +34,6 @@
         color: #ffffff;
         letter-spacing: 1px;
       }
-
-      /* Main Grid */
       .container {
         max-width: 1000px;
         margin: 20px auto;
@@ -46,7 +42,6 @@
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
         gap: 20px;
       }
-
       .game-card {
         background-color: #1e1e1e;
         border: 1px solid #333;
@@ -82,10 +77,6 @@
         font-size: 12px;
         color: #aaaaaa;
       }
-
-      /* ========================================== */
-      /* POP-UP MODAL STYLES                       */
-      /* ========================================== */
       .modal-backdrop {
         display: none;
         position: fixed;
@@ -103,8 +94,6 @@
       .modal-backdrop.active {
         display: flex;
       }
-
-      /* Taller and larger pop-up box matching your image */
       .modal-card {
         background-color: #18181b;
         border: 2px solid #333;
@@ -120,12 +109,10 @@
         box-shadow: 0 12px 32px rgba(0,0,0,0.8);
         animation: popIn 0.2s ease-out;
       }
-
       @keyframes popIn {
         from { transform: scale(0.95); opacity: 0; }
         to { transform: scale(1); opacity: 1; }
       }
-
       @media (max-width: 768px) {
         .modal-card {
           grid-template-columns: 1fr;
@@ -135,8 +122,6 @@
           padding: 24px;
         }
       }
-
-      /* Close Button */
       .close-btn {
         position: absolute;
         top: 14px;
@@ -152,15 +137,11 @@
       .close-btn:hover {
         color: #ffffff;
       }
-
-      /* Inside Pop-up: Left Side */
       .popup-left {
         display: flex;
         flex-direction: column;
         gap: 16px;
       }
-
-      /* Bigger, complete thumbnail image without cutting off */
       .popup-thumbnail {
         width: 100%;
         height: 240px;
@@ -169,12 +150,10 @@
         background-color: #0d0d0f;
         border: 1px solid #333;
       }
-
       .popup-title {
         font-size: 22px;
         font-weight: bold;
       }
-
       .popup-meta {
         font-size: 14px;
         color: #aaaaaa;
@@ -182,8 +161,6 @@
         justify-content: space-between;
         align-items: center;
       }
-
-      /* Clean White Device SVG Icons */
       .device-icons {
         display: flex;
         gap: 8px;
@@ -195,8 +172,6 @@
         fill: #ffffff;
         opacity: 0.9;
       }
-
-      /* Large Green Play Button */
       .play-btn {
         background-color: #2ecc71;
         color: white;
@@ -206,146 +181,4 @@
         border-radius: 8px;
         font-size: 22px;
         font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        transition: background-color 0.2s, transform 0.1s;
-        box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
-        margin-top: auto;
-      }
-      .play-btn:hover {
-        background-color: #27ae60;
-        transform: translateY(-2px);
-      }
-
-      /* Inside Pop-up: Right Side Description Box */
-      .popup-right {
-        background-color: #121214;
-        border: 1px solid #2a2a2e;
-        border-radius: 8px;
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .desc-header {
-        font-size: 18px;
-        font-weight: bold;
-        color: #ffffff;
-      }
-
-      .desc-text {
-        font-size: 14px;
-        color: #cccccc;
-        line-height: 1.6;
-        white-space: pre-line;
-      }
-
-      .desc-text a {
-        color: #3498db;
-        text-decoration: none;
-        word-break: break-all;
-      }
-      .desc-text a:hover {
-        text-decoration: underline;
-      }
-    </style>
-  </head>
-  <body>
-    <header class="header">
-      <h1>Trapper Guy's Games!</h1>
-    </header>
-
-    <!-- Main Grid -->
-    <main class="container" id="game-list"></main>
-
-    <!-- Pop-up Overlay Container -->
-    <div class="modal-backdrop" id="modalBackdrop">
-      <div class="modal-card">
-        <button class="close-btn" id="closeModal">&times;</button>
-        <div class="popup-left">
-          <img class="popup-thumbnail" id="modalThumb" src="" alt="Thumbnail">
-          <div class="popup-title" id="modalTitle"></div>
-          <div class="popup-meta">
-            <span id="modalMeta"></span>
-            <div class="device-icons" id="modalIcons"></div>
-          </div>
-          <a class="play-btn" id="modalPlay" href="#" target="_blank">
-            ▶ PLAY
-          </a>
-        </div>
-        <div class="popup-right">
-          <div class="desc-header">Description:</div>
-          <div class="desc-text" id="modalDesc"></div>
-        </div>
-      </div>
-    </div>
-
-    <script>
-      // ==========================================
-      // ADD YOUR GAMES HERE
-      // ==========================================
-      const myGames = [
-        {
-          id: "swap-possible",
-          title: "The Swap! Possible Game",
-          version: "1.0.6",
-          date: "2026-05-10",
-          link: "https://trapperperson.github.io/The-Swap-Possible-Game/",
-          thumbnail: "https://via.placeholder.com/400x220/000000/FFFFFF?text=Swap+Possible",
-          description: `The Swap! Possible Game is a Swapped version of The Impossible Game, it introduces a brand new level "Stable Reality", it has everything and even a little surprise once you beat it!
-
-All sprites were made by Trapper Guy and some took from The Impossible Game's sprites, and it was made on Scratch's Engine and Packaged inside Turbowarp's Packager.
-
-Link to original: <a href="https://youtube.com/example-video" target="_blank">https://youtube.com/example-video</a>`,
-          mobile: true,
-          pc: true
-        }
-      ];
-
-      const container = document.getElementById('game-list');
-      const backdrop = document.getElementById('modalBackdrop');
-      const closeBtn = document.getElementById('closeModal');
-
-      const mobileIconSVG = `<svg viewBox="0 0 24 24"><path d="M17 1H7C5.9 1 5 1.9 5 3v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14zM7 3h10v1H7V3z"/></svg>`;
-      const pcIconSVG = `<svg viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg>`;
-
-      myGames.forEach(game => {
-        const card = document.createElement('div');
-        card.className = 'game-card';
-        card.innerHTML = `
-          <img class="grid-thumbnail" src="${game.thumbnail}" alt="${game.title}">
-          <div class="card-info">
-            <div class="card-title">${game.title}</div>
-            <div class="card-date">Released: ${game.date}</div>
-          </div>
-        `;
-
-        card.addEventListener('click', () => openModal(game));
-        container.appendChild(card);
-      });
-
-      function openModal(game) {
-        document.getElementById('modalThumb').src = game.thumbnail;
-        document.getElementById('modalTitle').textContent = game.title;
-        document.getElementById('modalMeta').textContent = `Released: ${game.date} | Version: ${game.version}`;
-        document.getElementById('modalDesc').innerHTML = game.description;
-        document.getElementById('modalPlay').href = game.link;
-
-        const iconsContainer = document.getElementById('modalIcons');
-        iconsContainer.innerHTML = '';
-        if (game.mobile) iconsContainer.innerHTML += mobileIconSVG;
-        if (game.pc) iconsContainer.innerHTML += pcIconSVG;
-
-        backdrop.classList.add('active');
-      }
-
-      closeBtn.addEventListener('click', () => backdrop.classList.remove('active'));
-      backdrop.addEventListener('click', (e) => {
-        if (e.target === backdrop) backdrop.classList.remove('active');
-      });
-    </script>
-  </body>
-</html>
+        display: flex
