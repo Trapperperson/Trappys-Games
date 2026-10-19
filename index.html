@@ -223,13 +223,15 @@
         text-decoration: underline;
       }
 
-      /* Bouncy Trapper Mascot Widget Styles */
+      /* Fixed-Size Hover-Swap Trapper Mascot Widget */
       .trapper-widget {
         position: fixed;
         bottom: 20px;
         right: 20px;
         z-index: 1500;
         cursor: pointer;
+        width: 140px;
+        height: 140px;
         animation: slideUp 0.5s ease-out;
       }
       @keyframes slideUp {
@@ -237,17 +239,34 @@
         to { transform: translateY(0); opacity: 1; }
       }
       .trapper-img {
+        position: absolute;
+        bottom: 0;
+        right: 0;
         width: 130px;
         height: 130px;
         object-fit: contain;
         filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
-        transition: transform 0.2s;
+        transition: transform 0.2s, opacity 0.2s ease-in-out;
+      }
+      /* trap1 is visible by default, trap2 is hidden */
+      #trapperImg1 {
+        opacity: 1;
+      }
+      #trapperImg2 {
+        opacity: 0;
+        /* Aligns trap2 nicely so its character body matches trap1's position despite the speech bubble */
+        transform: translateY(10px); 
       }
       @keyframes bounce {
         0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-12px); }
+        50% { transform: translateY(-10px); }
       }
-      .trapper-widget:hover .trapper-img {
+      /* On hover, swap opacities and trigger bounce */
+      .trapper-widget:hover #trapperImg1 {
+        opacity: 0;
+      }
+      .trapper-widget:hover #trapperImg2 {
+        opacity: 1;
         animation: bounce 0.5s infinite ease-in-out;
       }
     </style>
@@ -259,9 +278,10 @@
 
     <main class="container" id="game-list"></main>
 
-    <!-- Interactive Bouncy Trapper Mascot Widget -->
+    <!-- Interactive Hover-Swap Trapper Mascot Widget -->
     <div class="trapper-widget" id="trapperWidget" title="Click to check out my YouTube channel!">
-      <img src="images/trap1.png" alt="Trapper Mascot" class="trapper-img" id="trapperImg">
+      <img src="images/trap1.png" alt="Trapper Mascot" class="trapper-img" id="trapperImg1">
+      <img src="images/trap2.png" alt="Trapper Mascot Talking" class="trapper-img" id="trapperImg2">
     </div>
 
     <div class="modal-backdrop" id="modalBackdrop">
@@ -347,22 +367,12 @@ Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" tar
         if (e.target === backdrop) backdrop.classList.remove('active');
       });
 
-      // Interactive Trapper Mascot Animation & YouTube Link Logic
+      // YouTube Channel Link Logic on Click
       const trapperWidget = document.getElementById('trapperWidget');
-      const trapperImg = document.getElementById('trapperImg');
       const ytChannelUrl = 'https://youtube.com/@trapper_guy_channel?si=hz8I4zq7Vjji0IeN';
       
-      let isInteracted = false;
-
       trapperWidget.addEventListener('click', () => {
-        if (!isInteracted) {
-          // First click: swap to trap2.png (which already includes the text)
-          trapperImg.src = 'images/trap2.png';
-          isInteracted = true;
-        } else {
-          // Second click: open YouTube channel link in a new tab
-          window.open(ytChannelUrl, '_blank');
-        }
+        window.open(ytChannelUrl, '_blank');
       });
     </script>
   </body>
