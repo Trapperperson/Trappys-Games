@@ -14,25 +14,26 @@
         font-family: Arial, sans-serif;
         background-color: #121212;
         color: #ffffff;
-        padding-top: 80px;
+        padding-top: 90px;
+        padding-bottom: 60px;
       }
       .header {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
-        height: 60px;
+        height: 75px;
         background-color: #1f1f1f;
         border-bottom: 2px solid #333333;
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 1000;
+        padding: 0 16px;
       }
-      .header h1 {
-        font-size: 24px;
-        color: #ffffff;
-        letter-spacing: 1px;
+      .header-logo {
+        height: 50px;
+        object-fit: contain;
       }
       .container {
         max-width: 1000px;
@@ -221,14 +222,47 @@
       .desc-text a:hover {
         text-decoration: underline;
       }
+
+      /* Bouncy Trapper Mascot Widget Styles */
+      .trapper-widget {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1500;
+        cursor: pointer;
+        animation: slideUp 0.5s ease-out;
+      }
+      @keyframes slideUp {
+        from { transform: translateY(100px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      .trapper-img {
+        width: 130px;
+        height: 130px;
+        object-fit: contain;
+        filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+        transition: transform 0.2s;
+      }
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+      }
+      .trapper-widget:hover .trapper-img {
+        animation: bounce 0.5s infinite ease-in-out;
+      }
     </style>
   </head>
   <body>
     <header class="header">
-      <h1>Trapper Guy's Games!</h1>
+      <img src="images/Trappy's Games.png" alt="Trappy's Games Logo" class="header-logo">
     </header>
 
     <main class="container" id="game-list"></main>
+
+    <!-- Interactive Bouncy Trapper Mascot Widget -->
+    <div class="trapper-widget" id="trapperWidget" title="Click to check out my YouTube channel!">
+      <img src="images/trap1.png" alt="Trapper Mascot" class="trapper-img" id="trapperImg">
+    </div>
 
     <div class="modal-backdrop" id="modalBackdrop">
       <div class="modal-card">
@@ -311,6 +345,24 @@ Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" tar
       closeBtn.addEventListener('click', () => backdrop.classList.remove('active'));
       backdrop.addEventListener('click', (e) => {
         if (e.target === backdrop) backdrop.classList.remove('active');
+      });
+
+      // Interactive Trapper Mascot Animation & YouTube Link Logic
+      const trapperWidget = document.getElementById('trapperWidget');
+      const trapperImg = document.getElementById('trapperImg');
+      const ytChannelUrl = 'https://youtube.com/@trapper_guy_channel?si=hz8I4zq7Vjji0IeN';
+      
+      let isInteracted = false;
+
+      trapperWidget.addEventListener('click', () => {
+        if (!isInteracted) {
+          // First click: swap to trap2.png (which already includes the text)
+          trapperImg.src = 'images/trap2.png';
+          isInteracted = true;
+        } else {
+          // Second click: open YouTube channel link in a new tab
+          window.open(ytChannelUrl, '_blank');
+        }
       });
     </script>
   </body>
