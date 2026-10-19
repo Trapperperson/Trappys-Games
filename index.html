@@ -223,15 +223,15 @@
         text-decoration: underline;
       }
 
-      /* Fixed-Size Hover-Swap Trapper Mascot Widget */
+      /* Perfect Sizing & Positioning for Trapper Mascot Widget */
       .trapper-widget {
         position: fixed;
-        bottom: 20px;
-        right: 20px;
+        bottom: 10px;
+        right: 10px;
         z-index: 1500;
         cursor: pointer;
-        width: 140px;
-        height: 140px;
+        width: 170px;
+        height: 170px;
         animation: slideUp 0.5s ease-out;
       }
       @keyframes slideUp {
@@ -242,26 +242,27 @@
         position: absolute;
         bottom: 0;
         right: 0;
-        width: 130px;
-        height: 130px;
         object-fit: contain;
         filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
-        transition: transform 0.2s, opacity 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out;
       }
-      /* trap1 is visible by default, trap2 is hidden */
+      /* trap1 styling (default state) */
       #trapperImg1 {
+        width: 110px;
+        height: 110px;
         opacity: 1;
       }
+      /* trap2 styling (wider to accommodate speech bubble without squishing) */
       #trapperImg2 {
+        width: 170px;
+        height: 170px;
         opacity: 0;
-        /* Aligns trap2 nicely so its character body matches trap1's position despite the speech bubble */
-        transform: translateY(10px); 
       }
       @keyframes bounce {
         0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
+        50% { transform: translateY(-8px); }
       }
-      /* On hover, swap opacities and trigger bounce */
+      /* Hover states: swap visibility and bounce */
       .trapper-widget:hover #trapperImg1 {
         opacity: 0;
       }
@@ -318,6 +319,10 @@
           description: `The Swap! Possible Game is a Swapped version of The Impossible Game, it introduces a brand new level "Stable Reality", it has everything and even a little surprise once you beat it!
 
 All sprites were made by Trapper Guy and some took from The Impossible Game's sprites, and it was made on Scratch's Engine and Packaged inside TurboWarp's Packager.
+
+Keybinds:
+Up Arrow/ Space Bar / Left Click, to Jump.
+P Key to Go back to the menu (Saves your attempts).
 
 Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" target="_blank">https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT</a>`,
           mobile: true,
