@@ -223,6 +223,69 @@
         text-decoration: underline;
       }
 
+      /* In-page game player */
+      .player {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 3000;
+        background-color: #0b0b0d;
+        flex-direction: column;
+      }
+      .player.active { display: flex; }
+      .player-bar {
+        height: 56px;
+        flex: none;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 0 16px;
+        background-color: #1f1f1f;
+        border-bottom: 2px solid #333;
+      }
+      .player-title {
+        flex: 1;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .player-vol { display: flex; align-items: center; gap: 8px; }
+      .player-vol input { width: 110px; accent-color: #2ecc71; cursor: pointer; }
+      .player-btn {
+        background-color: #2a2a2e;
+        color: #fff;
+        border: 1px solid #3a3a40;
+        border-radius: 6px;
+        padding: 7px 12px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: border-color 0.2s;
+      }
+      .player-btn:hover { border-color: #4cbf56; }
+      .player-stage {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px;
+      }
+      #playerFrame {
+        width: min(100%, calc((100vh - 104px) * 4 / 3));
+        aspect-ratio: 4 / 3;
+        border: 0;
+        background: #000;
+        border-radius: 6px;
+      }
+      #playerFrame:fullscreen {
+        width: 100%;
+        height: 100%;
+        aspect-ratio: auto;
+        border-radius: 0;
+      }
+      @media (max-width: 600px) { .player-vol input { width: 70px; } }
+
       /* Perfect Sizing & Positioning for Trapper Mascot Widget */
       .trapper-widget {
         position: fixed;
@@ -279,6 +342,21 @@
 
     <main class="container" id="game-list"></main>
 
+    <div class="player" id="player">
+      <div class="player-bar">
+        <div class="player-title" id="playerTitle"></div>
+        <div class="player-vol">
+          <button class="player-btn" id="muteBtn" type="button" title="Mute">🔊</button>
+          <input type="range" id="volSlider" min="0" max="100" value="100" title="Volume">
+        </div>
+        <button class="player-btn" id="fsBtn" type="button">⛶ Fullscreen</button>
+        <button class="player-btn" id="exitBtn" type="button">✕ Close</button>
+      </div>
+      <div class="player-stage">
+        <iframe id="playerFrame" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>
+      </div>
+    </div>
+
     <!-- Interactive Hover-Swap Trapper Mascot Widget -->
     <div class="trapper-widget" id="trapperWidget" title="Click to check out my YouTube channel!">
       <img src="images/trap1.png" alt="Trapper Mascot" class="trapper-img" id="trapperImg1">
@@ -295,7 +373,7 @@
             <span id="modalMeta"></span>
             <div class="device-icons" id="modalIcons"></div>
           </div>
-          <a class="play-btn" id="modalPlay" href="#" target="_blank">
+          <a class="play-btn" id="modalPlay" href="#">
             ▶ PLAY
           </a>
         </div>
@@ -314,7 +392,7 @@
           title: "The Swap! Possible Game",
           version: "1.0.6",
           date: "2026-05-10",
-          link: "https://trapperperson.github.io/The-Swap-Possible-Game/",
+          play: "games/swap-possible/index.html", // folder of the game (use a full URL if it lives elsewhere)
           thumbnail: "images/tspgthumbnail.png",
           description: `The Swap! Possible Game is a Swapped version of The Impossible Game, it introduces a brand new level "Stable Reality", it has everything and even a little surprise once you beat it!
 
@@ -330,6 +408,7 @@ Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" tar
         }
       ];
 
+      let currentGame = null;
       const container = document.getElementById('game-list');
       const backdrop = document.getElementById('modalBackdrop');
       const closeBtn = document.getElementById('closeModal');
@@ -357,7 +436,7 @@ Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" tar
         document.getElementById('modalTitle').textContent = game.title;
         document.getElementById('modalMeta').textContent = `Released: ${game.date} | Version: ${game.version}`;
         document.getElementById('modalDesc').innerHTML = game.description;
-        document.getElementById('modalPlay').href = game.link;
+        currentGame = game;
 
         const iconsContainer = document.getElementById('modalIcons');
         iconsContainer.innerHTML = '';
@@ -370,6 +449,57 @@ Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" tar
       closeBtn.addEventListener('click', () => backdrop.classList.remove('active'));
       backdrop.addEventListener('click', (e) => {
         if (e.target === backdrop) backdrop.classList.remove('active');
+      });
+
+      // ---------- Game player ----------
+      const player = document.getElementById('player');
+      const frame = document.getElementById('playerFrame');
+      const volSlider = document.getElementById('volSlider');
+      const muteBtn = document.getElementById('muteBtn');
+      const fsBtn = document.getElementById('fsBtn');
+      let muted = false;
+
+      // Sets the game's master volume (works for TurboWarp packager exports)
+      function applyVolume() {
+        try {
+          const engine = frame.contentWindow.Scratch.audioEngine;
+          engine.inputNode.gain.value = muted ? 0 : volSlider.value / 100;
+        } catch (e) { /* game not ready yet, or not same-origin */ }
+      }
+      function updateMuteIcon() {
+        muteBtn.textContent = (muted || volSlider.value == 0) ? '🔇' : '🔊';
+      }
+
+      document.getElementById('modalPlay').addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!currentGame) return;
+        document.getElementById('playerTitle').textContent = currentGame.title;
+        frame.src = currentGame.play;
+        backdrop.classList.remove('active');
+        player.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        // The game sets up its audio a moment after loading, so keep applying for a few seconds
+        let tries = 0;
+        const timer = setInterval(() => { applyVolume(); if (++tries > 20) clearInterval(timer); }, 250);
+        frame.onload = () => { applyVolume(); frame.focus(); };
+      });
+
+      volSlider.addEventListener('input', () => { muted = false; updateMuteIcon(); applyVolume(); });
+      muteBtn.addEventListener('click', () => { muted = !muted; updateMuteIcon(); applyVolume(); });
+
+      if (frame.requestFullscreen || frame.webkitRequestFullscreen) {
+        fsBtn.addEventListener('click', () => {
+          (frame.requestFullscreen || frame.webkitRequestFullscreen).call(frame);
+          frame.focus();
+        });
+      } else {
+        fsBtn.style.display = 'none'; // e.g. iPhone Safari doesn't allow this
+      }
+
+      document.getElementById('exitBtn').addEventListener('click', () => {
+        player.classList.remove('active');
+        frame.src = 'about:blank'; // stops the game and its sound
+        document.body.style.overflow = '';
       });
 
       // YouTube Channel Link Logic on Click
