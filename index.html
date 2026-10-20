@@ -223,7 +223,6 @@
         text-decoration: underline;
       }
 
-      /* In-page game player */
       .player {
         display: none;
         position: fixed;
@@ -286,7 +285,6 @@
       }
       @media (max-width: 600px) { .player-vol input { width: 70px; } }
 
-      /* Perfect Sizing & Positioning for Trapper Mascot Widget */
       .trapper-widget {
         position: fixed;
         bottom: 10px;
@@ -309,13 +307,11 @@
         filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
         transition: opacity 0.2s ease-in-out;
       }
-      /* trap1 styling (default state) */
       #trapperImg1 {
         width: 110px;
         height: 110px;
         opacity: 1;
       }
-      /* trap2 styling (wider to accommodate speech bubble without squishing) */
       #trapperImg2 {
         width: 170px;
         height: 170px;
@@ -325,7 +321,7 @@
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-8px); }
       }
-      /* Hover states: swap visibility and bounce */
+
       .trapper-widget:hover #trapperImg1 {
         opacity: 0;
       }
@@ -357,7 +353,6 @@
       </div>
     </div>
 
-    <!-- Interactive Hover-Swap Trapper Mascot Widget -->
     <div class="trapper-widget" id="trapperWidget" title="Click to check out my YouTube channel!">
       <img src="images/trap1.png" alt="Trapper Mascot" class="trapper-img" id="trapperImg1">
       <img src="images/trap2.png" alt="Trapper Mascot Talking" class="trapper-img" id="trapperImg2">
@@ -392,7 +387,7 @@
           title: "The Swap! Possible Game",
           version: "1.0.6",
           date: "2026-05-10",
-          play: "games/swap-possible/index.html", // folder of the game (use a full URL if it lives elsewhere)
+          play: "games/TheSwapPossibleGame/index.html",
           thumbnail: "images/tspgthumbnail.png",
           description: `The Swap! Possible Game is a Swapped version of The Impossible Game, it introduces a brand new level "Stable Reality", it has everything and even a little surprise once you beat it!
 
@@ -459,7 +454,7 @@ Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" tar
       const fsBtn = document.getElementById('fsBtn');
       let muted = false;
 
-      // Sets the game's master volume (works for TurboWarp packager exports)
+
       function applyVolume() {
         try {
           const engine = frame.contentWindow.Scratch.audioEngine;
@@ -478,7 +473,6 @@ Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" tar
         backdrop.classList.remove('active');
         player.classList.add('active');
         document.body.style.overflow = 'hidden';
-        // The game sets up its audio a moment after loading, so keep applying for a few seconds
         let tries = 0;
         const timer = setInterval(() => { applyVolume(); if (++tries > 20) clearInterval(timer); }, 250);
         frame.onload = () => { applyVolume(); frame.focus(); };
@@ -493,16 +487,15 @@ Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" tar
           frame.focus();
         });
       } else {
-        fsBtn.style.display = 'none'; // e.g. iPhone Safari doesn't allow this
+        fsBtn.style.display = 'none';
       }
 
       document.getElementById('exitBtn').addEventListener('click', () => {
         player.classList.remove('active');
-        frame.src = 'about:blank'; // stops the game and its sound
+        frame.src = 'about:blank';
         document.body.style.overflow = '';
       });
 
-      // YouTube Channel Link Logic on Click
       const trapperWidget = document.getElementById('trapperWidget');
       const ytChannelUrl = 'https://youtube.com/@trapper_guy_channel?si=hz8I4zq7Vjji0IeN';
       
