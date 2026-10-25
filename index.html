@@ -452,7 +452,6 @@ Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" tar
         if (e.target === backdrop) backdrop.classList.remove('active');
       });
 
-      // Game Player
       const player = document.getElementById('player');
       const frame = document.getElementById('playerFrame');
       const volSlider = document.getElementById('volSlider');
@@ -473,7 +472,7 @@ Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" tar
       function isMobileDevice() {
         if (navigator.userAgentData && navigator.userAgentData.mobile) return true;
         if (/Android|iPhone|iPad|iPod|Mobi/i.test(navigator.userAgent)) return true;
-        return navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1; // iPads
+        return navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
       }
       function pickVersion(game) {
         if (isMobileDevice()) return game.mobilePlay || game.play;
@@ -497,14 +496,36 @@ Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" tar
 
       const pauseBtn = document.getElementById('pauseBtn');
       let paused = false;
+
+      function pauseClock(w) {
+        if (w.__pauseClock) return w.__pauseClock;
+        const RealDate = w.Date;
+        const realNow = RealDate.now.bind(RealDate);
+        const st = { offset: 0, pausedAt: 0, realNow };
+        class ShiftedDate extends RealDate {
+          constructor(...args) {
+            if (args.length === 0) super(realNow() - st.offset);
+            else super(...args);
+          }
+          static now() { return realNow() - st.offset; }
+        }
+        w.Date = ShiftedDate;
+        w.__pauseClock = st;
+        return st;
+      }
+
       function setPaused(p) {
         try {
-          const rt = frame.contentWindow.vm.runtime;
+          const w = frame.contentWindow;
+          const rt = w.vm.runtime;
+          const st = pauseClock(w);
           if (p) {
+            st.pausedAt = st.realNow();
             rt.ioDevices.clock.pause();
             rt.stop();
             rt.audioEngine.audioContext.suspend();
           } else {
+            st.offset += st.realNow() - st.pausedAt;
             rt.ioDevices.clock.resume();
             rt.start();
             rt.audioEngine.audioContext.resume();
