@@ -230,6 +230,9 @@
         inset: 0;
         z-index: 3000;
         background-color: #0b0b0d;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         flex-direction: column;
       }
       .player.active { display: flex; }
@@ -269,22 +272,27 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 12px;
+        padding: 24px;
       }
       #playerFrame {
-        width: min(100%, calc((100vh - 104px) * 4 / 3));
+        width: min(100%, calc((100vh - 130px) * 4 / 3));
         aspect-ratio: 4 / 3;
         border: 0;
         background: #000;
-        border-radius: 6px;
+        border-radius: 4px;
+        box-shadow: 0 0 0 5px #0b0b0d,
+                    0 0 0 7px rgba(255, 255, 255, 0.35),
+                    0 14px 44px rgba(0, 0, 0, 0.85);
       }
       #playerFrame:fullscreen {
         width: 100%;
         height: 100%;
         aspect-ratio: auto;
         border-radius: 0;
+        box-shadow: none;
       }
       @media (max-width: 600px) {
+        .player-stage { padding: 14px; }
         .player-vol input { width: 70px; }
         .player-title { display: none; }
         .player-vol { margin-right: auto; }
@@ -395,6 +403,7 @@
           play: "games/TheSwapPossibleGame/index.html",
           mobilePlay: "games/TheSwapPossibleGame/mobile/index.html",
           thumbnail: "images/tspgthumbnail.png",
+          background: "images/bggames/swap-possible-bg.webp",
           description: `The Swap! Possible Game is a Swapped version of The Impossible Game, it introduces a brand new level "Stable Reality", it has everything and even a little surprise once you beat it!
 
 All sprites were made by Trapper Guy and some took from The Impossible Game's sprites, and it was made on Scratch's Engine and Packaged inside TurboWarp's Packager.
@@ -472,7 +481,7 @@ Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" tar
       function isMobileDevice() {
         if (navigator.userAgentData && navigator.userAgentData.mobile) return true;
         if (/Android|iPhone|iPad|iPod|Mobi/i.test(navigator.userAgent)) return true;
-        return navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+        return navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1; // iPads
       }
       function pickVersion(game) {
         if (isMobileDevice()) return game.mobilePlay || game.play;
@@ -485,6 +494,10 @@ Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" tar
         document.getElementById('playerTitle').textContent = currentGame.title;
         paused = false;
         pauseBtn.textContent = '⏸ Pause';
+        const bg = (isMobileDevice() && currentGame.mobileBackground) || currentGame.background;
+        player.style.backgroundImage = bg
+          ? `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url("${bg}")`
+          : '';
         frame.src = pickVersion(currentGame);
         backdrop.classList.remove('active');
         player.classList.add('active');
@@ -496,7 +509,6 @@ Link to original: <a href="https://youtu.be/T8vSogP9ipw?si=amaUgHXITfyfUzBT" tar
 
       const pauseBtn = document.getElementById('pauseBtn');
       let paused = false;
-
       function pauseClock(w) {
         if (w.__pauseClock) return w.__pauseClock;
         const RealDate = w.Date;
